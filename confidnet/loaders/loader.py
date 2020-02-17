@@ -69,7 +69,7 @@ class AbstractDataLoader:
             shuffle=False,
             pin_memory=self.pin_memory,
             num_workers=self.num_workers,
-        )
+        )        
 
         if self.valid_size == 0:
             LOGGER.warning("Valid size=0, no validation loader")

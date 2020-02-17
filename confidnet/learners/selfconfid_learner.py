@@ -138,10 +138,8 @@ class SelfConfidLearner(AbstractLeaner):
                     loss += self.criterion(output, target.squeeze(dim=1))
                 # Update metrics
                 pred = output[0].argmax(dim=1, keepdim=True)
-                confidence = torch.sigmoid(output[1])
-                print(confidence.shape)
-                metrics.update(pred, target, confidence)
-                exit()
+                confidence = torch.sigmoid(output[1])                
+                metrics.update(pred, target, confidence)                
 
         scores = metrics.get_scores(split=split)
         losses = {"loss_confid": loss}

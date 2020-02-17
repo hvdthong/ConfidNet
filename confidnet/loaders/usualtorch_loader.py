@@ -30,10 +30,10 @@ class CIFAR10Loader(AbstractDataLoader):
     def load_dataset(self):
         self.train_dataset = datasets.CIFAR10(
             root=self.data_dir, train=True, download=True, transform=self.augmentations_train
-        )
+        )           
         self.test_dataset = datasets.CIFAR10(
             root=self.data_dir, train=False, download=True, transform=self.augmentations_test
-        )
+        )        
 
 
 class CIFAR100Loader(AbstractDataLoader):

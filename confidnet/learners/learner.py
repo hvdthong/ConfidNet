@@ -27,15 +27,15 @@ class AbstractLeaner:
         # Usually val set is made from train set, else compute len as usual
         try:
             self.nsamples_train = len(self.train_loader.sampler.indices)
-            self.nsamples_val = len(self.val_loader.sampler.indices)
+            # self.nsamples_val = len(self.val_loader.sampler.indices)
         except:
             self.nsamples_train = len(self.train_loader.dataset)
-            self.nsamples_val = len(self.val_loader.dataset)
+            # self.nsamples_val = len(self.val_loader.dataset)
         self.nsamples_test = len(self.test_loader.dataset)
         # Segmentation case
         if self.task == "classification":
             self.prod_train_len = self.nsamples_train
-            self.prod_val_len = self.nsamples_val
+            # self.prod_val_len = self.nsamples_val
             self.prod_test_len = self.nsamples_test
         if self.task == "segmentation":
             self.prod_train_len = (
