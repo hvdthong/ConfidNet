@@ -12,7 +12,7 @@ training:
     output_folder: trained_model/cifar10/selfconfid
     task: classification
     learner: selfconfid
-    nb_epochs: 400
+    nb_epochs: 500
     batch_size: 128
     loss:
         name: selfconfid_mse
