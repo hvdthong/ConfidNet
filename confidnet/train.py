@@ -33,6 +33,9 @@ def main():
     # Device configuration
     device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
 
+    if not os.path.exists(config_args["training"]["output_folder"]):
+        os.makedirs(config_args["training"]["output_folder"])
+
     # Start from scatch or resume existing model and optim
     if config_args["training"]["output_folder"].exists():
         list_previous_ckpt = sorted(
