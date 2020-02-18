@@ -127,6 +127,7 @@ class SelfConfidLearner(AbstractLeaner):
 
         # Evaluation loop
         loop = tqdm(dloader, disable=not verbose)
+        confidence_pred = list()
         for batch_id, (data, target) in enumerate(loop):
             data, target = data.to(self.device), target.to(self.device)
 
@@ -138,12 +139,12 @@ class SelfConfidLearner(AbstractLeaner):
                     loss += self.criterion(output, target.squeeze(dim=1))
                 # Update metrics
                 pred = output[0].argmax(dim=1, keepdim=True)
-                confidence = torch.sigmoid(output[1])                
-                metrics.update(pred, target, confidence)                
-
+                confidence = torch.sigmoid(output[1])
+                metrics.update(pred, target, confidence)
+                confidence_pred += torch.flatten(confidence).tolist()                
         scores = metrics.get_scores(split=split)
         losses = {"loss_confid": loss}
-        return losses, scores
+        return losses, scores, confidence_pred
 
     def load_checkpoint(self, state_dict, uncertainty_state_dict=None, strict=True):
         if not uncertainty_state_dict:

@@ -12,12 +12,26 @@ from confidnet.utils import trust_scores
 from confidnet.utils.logger import get_logger
 from confidnet.utils.metrics import Metrics
 from confidnet.utils.misc import load_yaml
+import os
 
 LOGGER = get_logger(__name__, level="DEBUG")
 
 MODE_TYPE = ["normal", "gt", "mc_dropout", "trust_score", "confidnet"]
 MAX_NUMBER_TRUSTSCORE_SEG = 3000
 
+def write_file(path_file, data):
+    split_path = path_file.split("/")
+    path_ = split_path[:len(split_path) - 1]
+    path_ = "/".join(path_)
+
+    if not os.path.exists(path_):
+        os.makedirs(path_)
+    with open(path_file, 'w') as out_file:
+        for line in data:
+            # write line to output file
+            out_file.write(str(line))
+            out_file.write("\n")
+        out_file.close()
 
 def main():
     parser = argparse.ArgumentParser()
@@ -83,14 +97,15 @@ def main():
     LOGGER.info(f"Inference mode: {args.mode}")
 
     if args.mode != "trust_score":
-        _, scores_test = learner.evaluate(
+        _, scores_test, conf_pred = learner.evaluate(
             learner.test_loader,
             learner.prod_test_len,
             split="test",
             mode=args.mode,
             samples=args.samples,
             verbose=True,
-        )
+        )        
+        write_file('./results/%s_confidnet_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), conf_pred)
 
     # Special case TrustScore
     else:
