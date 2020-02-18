@@ -97,15 +97,17 @@ def main():
     LOGGER.info(f"Inference mode: {args.mode}")
 
     if args.mode != "trust_score":
-        _, scores_test, conf_pred = learner.evaluate(
+        _, scores_test, confidence_data = learner.evaluate(
             learner.test_loader,
             learner.prod_test_len,
             split="test",
             mode=args.mode,
             samples=args.samples,
             verbose=True,
-        )        
-        write_file('./results/%s_confidnet_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), conf_pred)
+        )
+        acc_pred, conf_pred = confidence_data        
+        write_file('./results/%s_confidnet_score_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), conf_pred)
+        write_file('./results/%s_confidnet_accurate_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), acc_pred)
 
     # Special case TrustScore
     else:
