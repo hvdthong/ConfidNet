@@ -91,7 +91,7 @@ class SelfConfidLearner(AbstractLeaner):
             logs_dict[s] = scores[s]
 
         # Val scores
-        val_losses, scores_val = self.evaluate(self.val_loader, self.prod_val_len, split="val")
+        val_losses, scores_val, _ = self.evaluate(self.val_loader, self.prod_val_len, split="val")
         logs_dict["val/loss_confid"] = {
             "value": val_losses["loss_confid"].item() / self.nsamples_val,
             "string": f"{(val_losses['loss_confid'].item() / self.nsamples_val):05.4e}",
@@ -100,7 +100,7 @@ class SelfConfidLearner(AbstractLeaner):
             logs_dict[sv] = scores_val[sv]
 
         # Test scores
-        test_losses, scores_test = self.evaluate(self.test_loader, self.prod_test_len, split="test")
+        test_losses, scores_test, _ = self.evaluate(self.test_loader, self.prod_test_len, split="test")
         logs_dict["test/loss_confid"] = {
             "value": test_losses["loss_confid"].item() / self.nsamples_test,
             "string": f"{(test_losses['loss_confid'].item() / self.nsamples_test):05.4e}",
@@ -140,11 +140,11 @@ class SelfConfidLearner(AbstractLeaner):
                 # Update metrics
                 pred = output[0].argmax(dim=1, keepdim=True)
                 confidence = torch.sigmoid(output[1])
-                metrics.update(pred, target, confidence)               
+                metrics.update(pred, target, confidence)                
         scores = metrics.get_scores(split=split)
         confidence_data = (metrics.accurate, metrics.proba_pred)        
         losses = {"loss_confid": loss}        
-        return losses, scores, confidence_data
+        return losses, scores, confidence_data        
 
     def load_checkpoint(self, state_dict, uncertainty_state_dict=None, strict=True):
         if not uncertainty_state_dict:
