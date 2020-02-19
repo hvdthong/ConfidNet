@@ -159,11 +159,10 @@ class SelfConfidLearner(AbstractLeaner):
         # Evaluation loop
         loop = tqdm(dloader)
         confidence = list()
-        for batch_id, (data) in enumerate(loop):
-            if config_args['data']['dataset'] == 'mnist':
-                x_test = data[0].to(self.device)
-                nimg, nrow, ncol, nchannel = x_test.shape[0], x_test.shape[1], x_test.shape[2], x_test.shape[3]
-                x_test = torch.reshape(x_test, (nimg, nchannel, nrow, ncol))
+        for batch_id, (data) in enumerate(loop):            
+            x_test = data[0].to(self.device)
+            nimg, nrow, ncol, nchannel = x_test.shape[0], x_test.shape[1], x_test.shape[2], x_test.shape[3]
+            x_test = torch.reshape(x_test, (nimg, nchannel, nrow, ncol))
 
             with torch.no_grad():
                 output = self.model(x_test)                
