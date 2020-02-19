@@ -5,9 +5,26 @@ from keras.datasets import mnist, cifar10
 # print(x_train.shape)
 print(x_test)
 
+# import torch
+# x_test = torch.load('./data/mnist-data/MNIST/processed/test.pt')
+# print(x_test)
+
+from torch.utils import data
 import torch
-x_test = torch.load('./data/mnist-data/MNIST/processed/test.pt')
-print(x_test)
+
+tensor_x = torch.Tensor(x_train) # transform to torch tensor
+tensor_y = torch.Tensor(y_train)
+
+my_dataset = data.TensorDataset(tensor_x,tensor_y) # create your datset
+my_dataloader = data.DataLoader(my_dataset, batch_size=128, shuffle=True) # create your dataloader
+
+from tqdm import tqdm
+loop = tqdm(my_dataloader)
+device = torch.device("cuda")
+for batch_id, (data, target) in enumerate(loop):
+    print(data.shape)
+    print(target.shape)
+    exit()
 
 # from torchvision import datasets
 # import torch
