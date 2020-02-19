@@ -145,6 +145,16 @@ class SelfConfidLearner(AbstractLeaner):
         return losses, scores, confidence_data
 
     def evaluate_adv(self, dloader, config_args):
+        """Measure the confidnet score of the adversarial examples        
+        
+        Args:
+            dloader (array): data of the adversarial examples             
+            config_args: configuration arguments from yaml files.
+
+        Returns:
+            confidence (list): the score of the confidnet
+        """
+
         self.model.eval()
 
         from torch.utils import data
