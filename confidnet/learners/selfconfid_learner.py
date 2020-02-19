@@ -126,11 +126,9 @@ class SelfConfidLearner(AbstractLeaner):
         loss = 0
 
         # Evaluation loop
-        loop = tqdm(dloader, disable=not verbose)
-        # confidence_pred = list()
+        loop = tqdm(dloader, disable=not verbose)        
         for batch_id, (data, target) in enumerate(loop):
-            data, target = data.to(self.device), target.to(self.device)
-
+            data, target = data.to(self.device), target.to(self.device)            
             with torch.no_grad():
                 output = self.model(data)
                 if self.task == "classification":
@@ -144,7 +142,35 @@ class SelfConfidLearner(AbstractLeaner):
         scores = metrics.get_scores(split=split)
         confidence_data = (metrics.accurate, metrics.proba_pred)        
         losses = {"loss_confid": loss}        
-        return losses, scores, confidence_data        
+        return losses, scores, confidence_data
+
+    def evaluate_adv(self, dloader, config_args):
+        self.model.eval()
+
+        from torch.utils import data
+        dloader = torch.Tensor(dloader)    
+        dloader = data.TensorDataset(dloader) # create your datset        
+        dloader = data.DataLoader(dloader, batch_size=config_args['training']['batch_size'],
+            shuffle=False,
+            pin_memory=config_args['training']['pin_memory'],
+            num_workers=config_args['training']['num_workers'],
+        )
+
+        # Evaluation loop
+        loop = tqdm(dloader)
+        confidence = list()
+        for batch_id, (data) in enumerate(loop):
+            if config_args['data']['dataset'] == 'mnist':
+                x_test = data[0].to(self.device)
+                nimg, nrow, ncol, nchannel = x_test.shape[0], x_test.shape[1], x_test.shape[2], x_test.shape[3]
+                x_test = torch.reshape(x_test, (nimg, nchannel, nrow, ncol))
+
+            with torch.no_grad():
+                output = self.model(x_test)                
+                confidence += torch.sigmoid(output[1]).tolist()
+
+        confidence = [c[0] for c in confidence]
+        return confidence
 
     def load_checkpoint(self, state_dict, uncertainty_state_dict=None, strict=True):
         if not uncertainty_state_dict:
