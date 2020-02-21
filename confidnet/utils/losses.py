@@ -12,9 +12,11 @@ class SelfConfidMSELoss(nn.modules.loss._Loss):
         self.task = config_args["training"]["task"]
         self.weighting = config_args["training"]["loss"]["weighting"]
         self.device = device
-        super().__init__()
-
+        super().__init__()        
     def forward(self, input, target):
+        # import pdb
+        # pdb.set_trace()
+
         probs = F.softmax(input[0], dim=1)
         confidence = torch.sigmoid(input[1]).squeeze()
         # Apply optional weighting
@@ -24,8 +26,31 @@ class SelfConfidMSELoss(nn.modules.loss._Loss):
         # Segmentation special case
         if self.task == "segmentation":
             labels_hot = labels_hot.permute(0, 3, 1, 2)
-        loss = weights * (confidence - (probs * labels_hot).sum(dim=1)) ** 2
+        loss = weights * (confidence - (probs * labels_hot).sum(dim=1)) ** 2        
         return torch.mean(loss)
+
+        # probs = F.softmax(input[0], dim=1)
+        # labels_hot = misc.one_hot_embedding(target, self.nb_classes).to(self.device)        
+        # loss = F.binary_cross_entropy_with_logits(probs, labels_hot)
+        # return torch.mean(loss)
+
+        # probs = F.softmax(input[0], dim=1)
+        # confidence = torch.sigmoid(input[1]).squeeze()                
+        # labels_hot = misc.one_hot_embedding(target, self.nb_classes).to(self.device)        
+        # loss = (confidence - (probs * labels_hot).sum(dim=1)) ** 2
+        # return torch.mean(loss)
+
+        # print(input)
+        # exit()
+        # probs = F.softmax(input, dim=1)
+        # labels_hot = misc.one_hot_embedding(target, self.nb_classes).to(self.device)        
+        # return F.binary_cross_entropy_with_logits(probs, labels_hot)        
+                
+        # # import pdb
+        # # pdb.set_trace()
+
+        # loss = F.binary_cross_entropy_with_logits(input[0], target)
+        # return torch.mean(loss)
 
 
 class SelfConfidTCPRLoss(nn.modules.loss._Loss):

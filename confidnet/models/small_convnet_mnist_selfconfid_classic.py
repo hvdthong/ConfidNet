@@ -21,6 +21,9 @@ class SmallConvNetMNISTSelfConfidClassic(AbstractModel):
         self.uncertainty5 = nn.Linear(400, 1)
 
     def forward(self, x):
+        # import pdb
+        # pdb.set_trace()
+
         out = F.relu(self.conv1(x))
         out = F.relu(self.conv2(out))
         out = self.maxpool(out)
@@ -28,12 +31,16 @@ class SmallConvNetMNISTSelfConfidClassic(AbstractModel):
             out = F.dropout(out, 0.25, training=self.training)
         else:
             out = self.dropout1(out)
+        
+        out = self.dropout1(out)
         out = out.view(out.size(0), -1)
         out = F.relu(self.fc1(out))
         if self.mc_dropout:
             out = F.dropout(out, 0.5, training=self.training)
         else:
             out = self.dropout2(out)
+        
+        out = self.dropout2(out)
 
         uncertainty = F.relu(self.uncertainty1(out))
         uncertainty = F.relu(self.uncertainty2(uncertainty))
@@ -41,4 +48,4 @@ class SmallConvNetMNISTSelfConfidClassic(AbstractModel):
         uncertainty = F.relu(self.uncertainty4(uncertainty))
         uncertainty = self.uncertainty5(uncertainty)
         pred = self.fc2(out)
-        return pred, uncertainty
+        return pred, uncertainty        

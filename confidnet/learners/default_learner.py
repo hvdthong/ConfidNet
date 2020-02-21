@@ -27,9 +27,15 @@ class DefaultLearner(AbstractLeaner):
         loop = tqdm(self.train_loader)
         for batch_id, (data, target) in enumerate(loop):
             data, target = data.to(self.device), target.to(self.device)
-            self.optimizer.zero_grad()
+            self.optimizer.zero_grad()            
             output = self.model(data)
-            if self.task == "classification":
+
+            # import pdb
+            # pdb.set_trace()
+            # print(output)
+            # exit()
+
+            if self.task == "classification":                
                 current_loss = self.criterion(output, target)
             elif self.task == "segmentation":
                 current_loss = self.criterion(output, target.squeeze(dim=1))

@@ -19,13 +19,14 @@ class SelfConfidLearner(AbstractLeaner):
         self.freeze_layers()
         self.disable_bn(verbose=True)
         if self.config_args["model"].get("uncertainty", None):
-            self.disable_dropout(verbose=True)
-
+            self.disable_dropout(verbose=True) 
     def train(self, epoch):
         self.model.train()
+        
         self.disable_bn()
         if self.config_args["model"].get("uncertainty", None):
             self.disable_dropout()
+
         metrics = Metrics(
             self.metrics, self.prod_train_len, self.num_classes
         )
@@ -34,19 +35,19 @@ class SelfConfidLearner(AbstractLeaner):
 
         # Training loop
         loop = tqdm(self.train_loader)
+        
         for batch_id, (data, target) in enumerate(loop):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output = self.model(data)
 
-            # Potential temperature scaling
-            if self.temperature:
-                output = list(output)
-                output[0] = output[0] / self.temperature
-                output = tuple(output)
+            # import pdb
+            # pdb.set_trace()
+            # print(output[0])
+            # exit()
 
             if self.task == "classification":
-                current_loss = self.criterion(output, target)
+                current_loss = self.criterion(output, target)                
             elif self.task == "segmentation":
                 current_loss = self.criterion(output, target.squeeze(dim=1))
             current_loss.backward()
@@ -121,6 +122,7 @@ class SelfConfidLearner(AbstractLeaner):
         self.save_tb(logs_dict)
 
     def evaluate(self, dloader, len_dataset, split="test", verbose=False, **args):
+
         self.model.eval()
         metrics = Metrics(self.metrics, len_dataset, self.num_classes)
         loss = 0
@@ -156,7 +158,6 @@ class SelfConfidLearner(AbstractLeaner):
         """
 
         self.model.eval()
-
         from torch.utils import data
         dloader = torch.Tensor(dloader)    
         dloader = data.TensorDataset(dloader) # create your datset        
