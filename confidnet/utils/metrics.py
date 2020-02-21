@@ -22,8 +22,6 @@ class Metrics:
         self.confusion_matrix = np.zeros((self.n_classes, self.n_classes))
 
     def update(self, pred, target, confidence):
-        
-        
         self.accurate.extend(pred.eq(target.view_as(pred)).detach().to("cpu").numpy())
         self.accuracy += pred.eq(target.view_as(pred)).sum().item()
         self.errors.extend((pred != target.view_as(pred)).detach().to("cpu").numpy())

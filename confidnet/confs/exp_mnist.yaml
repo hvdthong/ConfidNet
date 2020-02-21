@@ -32,7 +32,12 @@ training:
 
 # Model parameters
 model:
-    name: mlp
-    resume:
-    hidden_size: 1000
-    is_dropout: True
+    # name: mlp
+    # resume:
+    # hidden_size: 1000
+    # is_dropout: True
+
+    name: small_convnet_mnist
+    # resume:
+    # hidden_size: 1000
+    # is_dropout: True

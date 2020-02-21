@@ -18,8 +18,8 @@ class MLP(AbstractModel):
         self.fc_dropout = nn.Dropout(0.3)
 
     def forward(self, x):
-        import pdb
-        pdb.set_trace()
+        # import pdb
+        # pdb.set_trace()
         out = x.view(-1, self.fc1.in_features)
         out = F.relu(self.fc1(out))
         if self.dropout:

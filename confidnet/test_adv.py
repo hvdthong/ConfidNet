@@ -96,5 +96,6 @@ if __name__ == '__main__':
         adv = np.load('./data_adv/{}_{}.npy'.format(args.d, args.attack))    
 
     confidnet_adv = learner.evaluate_adv(adv, config_args=config_args)
-    from test import write_file    
+    from test import write_file
+    
     write_file('./results/%s_adv_confidnet_epoch_%i_%s.txt' % (config_args['data']['dataset'], args.epoch, args.attack), confidnet_adv)
