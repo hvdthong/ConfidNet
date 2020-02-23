@@ -4,10 +4,10 @@ data:
     input_size: [32,32]
     input_channels: 3
     num_classes: 10
-    valid_size: 0.1
+    valid_size: 0.25
 
 training:
-    output_folder: trained_model/cifar10/selfconfid
+    output_folder: random_trained_model/cifar10/selfconfid
     task: classification
     learner: selfconfid
     nb_epochs: 200

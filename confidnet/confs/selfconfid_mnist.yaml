@@ -4,10 +4,10 @@ data:
     input_size: [28,28]
     input_channels: 1
     num_classes: 10
-    valid_size: 0.1
+    valid_size: 0.25
 
 training:
-    output_folder: trained_model/mnist/selfconfid
+    output_folder: random_trained_model/mnist/selfconfid
     task: classification
     learner: selfconfid
     nb_epochs: 50
@@ -17,7 +17,7 @@ training:
         weighting: 1
     optimizer:
         name: adam
-        lr: 0.000001        
+        lr: 0.000001
     lr_schedule:
     ft_on_val: False
     metrics: ['accuracy', 'auc', 'ap_success', 'accuracy_success', 'ap_errors', 'accuracy_errors']
@@ -30,4 +30,3 @@ model:
     name: small_convnet_mnist_selfconfid_cloning
     resume: 
     uncertainty: 
-
