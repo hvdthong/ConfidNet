@@ -16,6 +16,8 @@ LOGGER = get_logger(__name__, level="DEBUG")
 class SelfConfidLearner(AbstractLeaner):
     def __init__(self, config_args, train_loader, val_loader, test_loader, start_epoch, device):
         super().__init__(config_args, train_loader, val_loader, test_loader, start_epoch, device)
+        # import pdb
+        # pdb.set_trace()
         self.freeze_layers()
         self.disable_bn(verbose=True)
         if self.config_args["model"].get("uncertainty", None):
@@ -183,6 +185,8 @@ class SelfConfidLearner(AbstractLeaner):
         return confidence
 
     def load_checkpoint(self, state_dict, uncertainty_state_dict=None, strict=True):
+        # import pdb
+        # pdb.set_trace()
         if not uncertainty_state_dict:
             self.model.load_state_dict(state_dict, strict=strict)
         else:

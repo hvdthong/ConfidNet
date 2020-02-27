@@ -33,6 +33,6 @@ training:
 # Model parameters
 model:
     name: vgg16_selfconfid_cloning
-    resume: trained_model/cifar/vgg16/model_epoch_197.ckpt
+    resume: trained_model/cifar/vgg16/model_epoch_040.ckpt
     uncertainty: 
 

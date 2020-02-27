@@ -14,7 +14,7 @@ from confidnet.utils.tensorboard_logger import TensorboardLogger
 LOGGER = get_logger(__name__, level="DEBUG")
 
 
-def main():
+def main():    
     parser = argparse.ArgumentParser()
     parser.add_argument("--config_path", "-c", type=str, default=None, help="Path for config yaml")
     parser.add_argument(
@@ -29,7 +29,7 @@ def main():
     )
     args = parser.parse_args()
 
-    config_args = load_yaml(args.config_path)
+    config_args = load_yaml(args.config_path)    
     # Device configuration
     device = torch.device("cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
 
@@ -87,10 +87,12 @@ def main():
         learner.model.load_state_dict(checkpoint["model_state_dict"])
         learner.optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
     elif config_args["model"]["resume"]:
+        # import pdb
+        # pdb.set_trace()
         LOGGER.info(f"Loading pretrained model from {config_args['model']['resume']}")
         if config_args["model"]["resume"] == "vgg16":
             learner.model.init_vgg16_params()
-        else:
+        else:                        
             pretrained_checkpoint = torch.load(config_args["model"]["resume"])
             uncertainty_checkpoint = config_args["model"].get("uncertainty", None)
             if uncertainty_checkpoint:
