@@ -9,10 +9,10 @@ data:
 
 # Training parameters
 training:
-    output_folder: trained_model/cifar/vgg16_selfconfid
+    output_folder: trained_model/cifar/vgg16_selfconfid_uncertainty
     task: classification
     learner: selfconfid
-    nb_epochs: 500
+    nb_epochs: 200
     batch_size: 128
     loss:
         name: selfconfid_mse
@@ -34,5 +34,5 @@ training:
 model:
     name: vgg16_selfconfid_cloning
     resume: trained_model/cifar/vgg16/model_epoch_197.ckpt
-    uncertainty: 
+    uncertainty: trained_model/cifar/vgg16_selfconfid/model_epoch_370.ckpt
 

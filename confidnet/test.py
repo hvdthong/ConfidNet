@@ -105,7 +105,10 @@ def main():
             samples=args.samples,
             verbose=True,
         )
-        acc_pred, conf_pred = confidence_data        
+        acc_pred, conf_pred = confidence_data
+        # write_file('./results_ver1/%s_confidnet_score_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), conf_pred)
+        # write_file('./results_ver1/%s_confidnet_accurate_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), acc_pred)
+
         write_file('./results/%s_confidnet_score_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), conf_pred)
         write_file('./results/%s_confidnet_accurate_epoch_%i.txt' % (config_args['data']['dataset'], args.epoch), acc_pred)
 
