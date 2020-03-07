@@ -102,7 +102,7 @@ def main():
                 learner.load_checkpoint(
                     pretrained_checkpoint["model_state_dict"],
                     torch.load(uncertainty_checkpoint)["model_state_dict"],
-                    strict=False,
+                    strict=True,
                 )
             else:
                 learner.load_checkpoint(pretrained_checkpoint["model_state_dict"], strict=False)

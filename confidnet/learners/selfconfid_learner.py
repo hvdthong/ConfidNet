@@ -19,15 +19,15 @@ class SelfConfidLearner(AbstractLeaner):
         # import pdb
         # pdb.set_trace()
         self.freeze_layers()
-        self.disable_bn(verbose=True)
-        if self.config_args["model"].get("uncertainty", None):
-            self.disable_dropout(verbose=True) 
+        # self.disable_bn(verbose=True)
+        # if self.config_args["model"].get("uncertainty", None):
+        #     self.disable_dropout(verbose=True) 
     def train(self, epoch):
         self.model.train()
         
-        self.disable_bn()
-        if self.config_args["model"].get("uncertainty", None):
-            self.disable_dropout()
+        # self.disable_bn()
+        # if self.config_args["model"].get("uncertainty", None):
+        #     self.disable_dropout()
 
         metrics = Metrics(
             self.metrics, self.prod_train_len, self.num_classes
@@ -40,6 +40,9 @@ class SelfConfidLearner(AbstractLeaner):
         
         for batch_id, (data, target) in enumerate(loop):
             data, target = data.to(self.device), target.to(self.device)
+            print(data.shape)
+            print(target.shape)
+            exit()
             self.optimizer.zero_grad()
             output = self.model(data)
 
@@ -221,11 +224,14 @@ class SelfConfidLearner(AbstractLeaner):
     def freeze_layers(self):
         # Eventual fine-tuning for self-confid
         LOGGER.info("Freezing every layer except uncertainty")
-        for param in self.model.named_parameters():
+        for param in self.model.named_parameters():            
             if "uncertainty" in param[0]:
                 print(param[0], "kept to training")
                 continue
-            param[1].requires_grad = False
+            else:
+                param[1].requires_grad = False
+        #     print(param[0], param[1].requires_grad)
+        # exit()
 
     def disable_bn(self, verbose=False):
         # Freeze also BN running average parameters
