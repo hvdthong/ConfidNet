@@ -40,9 +40,6 @@ class SelfConfidLearner(AbstractLeaner):
         
         for batch_id, (data, target) in enumerate(loop):
             data, target = data.to(self.device), target.to(self.device)
-            print(data.shape)
-            print(target.shape)
-            exit()
             self.optimizer.zero_grad()
             output = self.model(data)
 
